@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@nextmux.com',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'admin',
-        ]);
+        ]);  
+        
+        
     }
 }
