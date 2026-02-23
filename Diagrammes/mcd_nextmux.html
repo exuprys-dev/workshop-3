@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>MCD – Nextmux Mini ERP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0d0d;
+    color: #f0ede6;
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+  .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff6b35;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .diagram-container {
+    width: 100%;
+    max-width: 1200px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 30px;
+    overflow-x: auto;
+  }
+
+  svg { display: block; margin: 0 auto; }
+
+  /* Entity */
+  .entity-rect { rx: 4; stroke-width: 2; fill: #1a1a1a; }
+  .entity-header { fill-opacity: 0.15; rx: 4; }
+  .entity-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; text-anchor: middle; dominant-baseline: middle; }
+  .attr-text { font-family: 'Space Mono', monospace; font-size: 10px; fill: #bbb; dominant-baseline: middle; }
+  .pk { fill: #ff6b35; font-weight: 700; }
+  .divider { stroke: #2a2a2a; stroke-width: 1; }
+
+  /* Association diamond */
+  .assoc-diamond { stroke-width: 2; fill: #222; }
+  .assoc-name { font-family: 'Space Mono', monospace; font-size: 10px; text-anchor: middle; dominant-baseline: middle; font-weight: 700; }
+
+  /* Lines */
+  .rel-line { stroke: #444; stroke-width: 1.5; fill: none; }
+  .card-label { font-family: 'Space Mono', monospace; font-size: 10px; fill: #ff6b35; text-anchor: middle; }
+
+  .legend {
+    display: flex; gap: 30px; margin-top: 24px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Space Mono', monospace; font-size: 10px; color: #666;
+  }
+</style>
+</head>
+<body>
+
+<h1>MCD — Modèle Conceptuel de Données</h1>
+<p class="subtitle">Nextmux · Mini ERP</p>
+
+<div class="diagram-container">
+<svg width="1140" height="920" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="dot" markerWidth="6" markerHeight="6" refX="3" refY="3">
+    <circle cx="3" cy="3" r="2" fill="#444"/>
+  </marker>
+</defs>
+
+<!-- ================================================================ -->
+<!-- ENTITIES                                                          -->
+<!-- ================================================================ -->
+
+<!-- ===== CLIENT (col 1, row 1) x=30, y=60 w=170 h=170 ===== -->
+<g id="CLIENT">
+  <rect x="30" y="60" width="170" height="175" rx="4" class="entity-rect" stroke="#ff6b35"/>
+  <rect x="30" y="60" width="170" height="36" rx="4" fill="#ff6b35" fill-opacity="0.15"/>
+  <text x="115" y="79" class="entity-name" fill="#ff6b35">CLIENT</text>
+  <line x1="30" y1="96" x2="200" y2="96" class="divider"/>
+  <text x="38" y="111" class="attr-text pk"># id_client</text>
+  <text x="38" y="127" class="attr-text">nom</text>
+  <text x="38" y="143" class="attr-text">prenom</text>
+  <text x="38" y="159" class="attr-text">email</text>
+  <text x="38" y="175" class="attr-text">telephone</text>
+  <text x="38" y="191" class="attr-text">adresse</text>
+  <text x="38" y="207" class="attr-text">date_creation</text>
+  <text x="38" y="225" class="attr-text">statut</text>
+</g>
+
+<!-- ===== PROJET (col 2, row 1) x=370, y=60 ===== -->
+<g id="PROJET">
+  <rect x="360" y="60" width="180" height="190" rx="4" class="entity-rect" stroke="#f7c873"/>
+  <rect x="360" y="60" width="180" height="36" rx="4" fill="#f7c873" fill-opacity="0.15"/>
+  <text x="450" y="79" class="entity-name" fill="#f7c873">PROJET</text>
+  <line x1="360" y1="96" x2="540" y2="96" class="divider"/>
+  <text x="368" y="111" class="attr-text pk"># id_projet</text>
+  <text x="368" y="127" class="attr-text">nom_projet</text>
+  <text x="368" y="143" class="attr-text">description</text>
+  <text x="368" y="159" class="attr-text">date_debut</text>
+  <text x="368" y="175" class="attr-text">date_fin</text>
+  <text x="368" y="191" class="attr-text">budget</text>
+  <text x="368" y="207" class="attr-text">statut</text>
+  <text x="368" y="223" class="attr-text">id_client (FK)</text>
+  <text x="368" y="241" class="attr-text">id_utilisateur (FK)</text>
+</g>
+
+<!-- ===== TACHE (col 3, row 1) x=730, y=60 ===== -->
+<g id="TACHE">
+  <rect x="720" y="60" width="185" height="190" rx="4" class="entity-rect" stroke="#a8e6cf"/>
+  <rect x="720" y="60" width="185" height="36" rx="4" fill="#a8e6cf" fill-opacity="0.15"/>
+  <text x="812" y="79" class="entity-name" fill="#a8e6cf">TACHE</text>
+  <line x1="720" y1="96" x2="905" y2="96" class="divider"/>
+  <text x="728" y="111" class="attr-text pk"># id_tache</text>
+  <text x="728" y="127" class="attr-text">titre</text>
+  <text x="728" y="143" class="attr-text">description</text>
+  <text x="728" y="159" class="attr-text">date_echeance</text>
+  <text x="728" y="175" class="attr-text">priorite</text>
+  <text x="728" y="191" class="attr-text">statut</text>
+  <text x="728" y="207" class="attr-text">id_projet (FK)</text>
+  <text x="728" y="223" class="attr-text">id_utilisateur (FK)</text>
+</g>
+
+<!-- ===== UTILISATEUR (col 4, row 1) x=960, y=60 ===== -->
+<g id="UTILISATEUR">
+  <rect x="960" y="60" width="165" height="160" rx="4" class="entity-rect" stroke="#888"/>
+  <rect x="960" y="60" width="165" height="36" rx="4" fill="#888" fill-opacity="0.15"/>
+  <text x="1042" y="79" class="entity-name" fill="#aaa">UTILISATEUR</text>
+  <line x1="960" y1="96" x2="1125" y2="96" class="divider"/>
+  <text x="968" y="111" class="attr-text pk"># id_utilisateur</text>
+  <text x="968" y="127" class="attr-text">nom</text>
+  <text x="968" y="143" class="attr-text">email</text>
+  <text x="968" y="159" class="attr-text">mot_de_passe</text>
+  <text x="968" y="175" class="attr-text">role</text>
+  <text x="968" y="191" class="attr-text">date_creation</text>
+</g>
+
+<!-- ===== FACTURE (col 1, row 3) x=30, y=480 ===== -->
+<g id="FACTURE">
+  <rect x="30" y="490" width="180" height="210" rx="4" class="entity-rect" stroke="#c9a8f7"/>
+  <rect x="30" y="490" width="180" height="36" rx="4" fill="#c9a8f7" fill-opacity="0.15"/>
+  <text x="120" y="509" class="entity-name" fill="#c9a8f7">FACTURE</text>
+  <line x1="30" y1="526" x2="210" y2="526" class="divider"/>
+  <text x="38" y="541" class="attr-text pk"># id_facture</text>
+  <text x="38" y="557" class="attr-text">numero</text>
+  <text x="38" y="573" class="attr-text">date_emission</text>
+  <text x="38" y="589" class="attr-text">date_echeance</text>
+  <text x="38" y="605" class="attr-text">montant_ht</text>
+  <text x="38" y="621" class="attr-text">tva</text>
+  <text x="38" y="637" class="attr-text">montant_ttc</text>
+  <text x="38" y="653" class="attr-text">statut</text>
+  <text x="38" y="669" class="attr-text">id_client (FK)</text>
+  <text x="38" y="685" class="attr-text">id_projet (FK)</text>
+</g>
+
+<!-- ===== LIGNE_FACTURE (col 2, row 3) x=290, y=490 ===== -->
+<g id="LIGNE_FACTURE">
+  <rect x="310" y="490" width="185" height="155" rx="4" class="entity-rect" stroke="#c9a8f7"/>
+  <rect x="310" y="490" width="185" height="36" rx="4" fill="#c9a8f7" fill-opacity="0.12"/>
+  <text x="402" y="509" class="entity-name" fill="#c9a8f7">LIGNE_FACTURE</text>
+  <line x1="310" y1="526" x2="495" y2="526" class="divider"/>
+  <text x="318" y="541" class="attr-text pk"># id_ligne</text>
+  <text x="318" y="557" class="attr-text">description</text>
+  <text x="318" y="573" class="attr-text">quantite</text>
+  <text x="318" y="589" class="attr-text">prix_unitaire</text>
+  <text x="318" y="605" class="attr-text">sous_total</text>
+  <text x="318" y="621" class="attr-text">id_facture (FK)</text>
+</g>
+
+<!-- ===== PAIEMENT (col 3, row 3) x=560, y=490 ===== -->
+<g id="PAIEMENT">
+  <rect x="560" y="490" width="185" height="170" rx="4" class="entity-rect" stroke="#c9a8f7"/>
+  <rect x="560" y="490" width="185" height="36" rx="4" fill="#c9a8f7" fill-opacity="0.15"/>
+  <text x="652" y="509" class="entity-name" fill="#c9a8f7">PAIEMENT</text>
+  <line x1="560" y1="526" x2="745" y2="526" class="divider"/>
+  <text x="568" y="541" class="attr-text pk"># id_paiement</text>
+  <text x="568" y="557" class="attr-text">montant</text>
+  <text x="568" y="573" class="attr-text">date_paiement</text>
+  <text x="568" y="589" class="attr-text">mode_paiement</text>
+  <text x="568" y="605" class="attr-text">reference</text>
+  <text x="568" y="621" class="attr-text">id_facture (FK)</text>
+  <text x="568" y="637" class="attr-text">statut</text>
+</g>
+
+<!-- ===== DEPENSE (col 4, row 3) x=800, y=490 ===== -->
+<g id="DEPENSE">
+  <rect x="800" y="490" width="185" height="190" rx="4" class="entity-rect" stroke="#c9a8f7"/>
+  <rect x="800" y="490" width="185" height="36" rx="4" fill="#c9a8f7" fill-opacity="0.15"/>
+  <text x="892" y="509" class="entity-name" fill="#c9a8f7">DEPENSE</text>
+  <line x1="800" y1="526" x2="985" y2="526" class="divider"/>
+  <text x="808" y="541" class="attr-text pk"># id_depense</text>
+  <text x="808" y="557" class="attr-text">libelle</text>
+  <text x="808" y="573" class="attr-text">montant</text>
+  <text x="808" y="589" class="attr-text">date_depense</text>
+  <text x="808" y="605" class="attr-text">justificatif</text>
+  <text x="808" y="621" class="attr-text">id_projet (FK)</text>
+  <text x="808" y="637" class="attr-text">id_categorie (FK)</text>
+  <text x="808" y="653" class="attr-text">id_utilisateur (FK)</text>
+</g>
+
+<!-- ===== CATEGORIE_DEPENSE (col 4, row 4) x=800, y=760 ===== -->
+<g id="CAT_DEP">
+  <rect x="800" y="760" width="185" height="120" rx="4" class="entity-rect" stroke="#888"/>
+  <rect x="800" y="760" width="185" height="36" rx="4" fill="#888" fill-opacity="0.12"/>
+  <text x="892" y="779" class="entity-name" fill="#aaa">CAT_DEPENSE</text>
+  <line x1="800" y1="796" x2="985" y2="796" class="divider"/>
+  <text x="808" y="811" class="attr-text pk"># id_categorie</text>
+  <text x="808" y="827" class="attr-text">libelle</text>
+  <text x="808" y="843" class="attr-text">couleur</text>
+  <text x="808" y="859" class="attr-text">description</text>
+</g>
+
+<!-- ================================================================ -->
+<!-- ASSOCIATIONS (diamonds)                                           -->
+<!-- ================================================================ -->
+
+<!-- CLIENT —— COMMANDE —— PROJET -->
+<!-- diamond at x=270, y=155 -->
+<polygon points="270,135 300,155 270,175 240,155" class="assoc-diamond" stroke="#888"/>
+<text x="270" y="155" class="assoc-name" fill="#aaa">passe</text>
+<line x1="200" y1="155" x2="240" y2="155" class="rel-line"/>
+<line x1="300" y1="155" x2="360" y2="155" class="rel-line"/>
+<text x="218" y="148" class="card-label">1,1</text>
+<text x="330" y="148" class="card-label">0,N</text>
+
+<!-- PROJET —— CONTIENT —— TACHE -->
+<polygon points="630,155 660,135 690,155 660,175" class="assoc-diamond" stroke="#888"/>
+<text x="660" y="155" class="assoc-name" fill="#aaa">contient</text>
+<line x1="540" y1="155" x2="630" y2="155" class="rel-line"/>
+<line x1="690" y1="155" x2="720" y2="155" class="rel-line"/>
+<text x="558" y="148" class="card-label">1,1</text>
+<text x="700" y="148" class="card-label">0,N</text>
+
+<!-- TACHE —— ASSIGNEE —— UTILISATEUR -->
+<polygon points="930,130 960,110 990,130 960,150" class="assoc-diamond" stroke="#888"/>
+<text x="960" y="130" class="assoc-name" fill="#aaa">assignée</text>
+<line x1="905" y1="130" x2="930" y2="130" class="rel-line"/>
+<line x1="990" y1="130" x2="960" y2="130" class="rel-line"/>
+<line x1="960" y1="110" x2="1042" y2="96" class="rel-line"/>
+<text x="910" y="123" class="card-label">0,N</text>
+<text x="968" y="96" class="card-label">1,1</text>
+
+<!-- CLIENT —— RECOIT —— FACTURE (vertical) -->
+<polygon points="115,370 140,390 115,410 90,390" class="assoc-diamond" stroke="#888"/>
+<text x="115" y="390" class="assoc-name" fill="#aaa">reçoit</text>
+<line x1="115" y1="235" x2="115" y2="370" class="rel-line"/>
+<line x1="115" y1="410" x2="115" y2="490" class="rel-line"/>
+<text x="125" y="260" class="card-label">1,1</text>
+<text x="125" y="480" class="card-label">0,N</text>
+
+<!-- PROJET —— FACTUREE_PAR (PROJET -> FACTURE) diagonal -->
+<line x1="450" y1="250" x2="210" y2="595" class="rel-line" stroke-dasharray="5,3" stroke="#555"/>
+<text x="300" y="420" class="card-label" style="fill:#555">0,N</text>
+
+<!-- FACTURE —— COMPOSE —— LIGNE_FACTURE -->
+<polygon points="265,570 290,550 315,570 290,590" class="assoc-diamond" stroke="#888"/>
+<text x="290" y="570" class="assoc-name" fill="#aaa">compose</text>
+<line x1="210" y1="570" x2="265" y2="570" class="rel-line"/>
+<line x1="315" y1="570" x2="310" y2="570" class="rel-line"/>
+<text x="228" y="563" class="card-label">1,1</text>
+<text x="296" y="553" class="card-label">1,N</text>
+
+<!-- FACTURE —— REGLE_PAR —— PAIEMENT -->
+<polygon points="490,570 520,550 550,570 520,590" class="assoc-diamond" stroke="#888"/>
+<text x="520" y="570" class="assoc-name" fill="#aaa">réglée</text>
+<line x1="495" y1="570" x2="490" y2="570" class="rel-line"/>
+<line x1="550" y1="570" x2="560" y2="575" class="rel-line"/>
+<text x="504" y="563" class="card-label">1,1</text>
+<text x="538" y="556" class="card-label">0,N</text>
+
+<!-- PROJET —— GENERE —— DEPENSE -->
+<polygon points="660,390 690,370 720,390 690,410" class="assoc-diamond" stroke="#888"/>
+<text x="690" y="390" class="assoc-name" fill="#aaa">génère</text>
+<!-- PROJET center bottom ~ 450,250 → diamond -->
+<path d="M 450 250 Q 450 390 660 390" class="rel-line" fill="none"/>
+<line x1="720" y1="390" x2="800" y2="555" class="rel-line"/>
+<text x="470" y="310" class="card-label">1,1</text>
+<text x="755" y="540" class="card-label">0,N</text>
+
+<!-- DEPENSE —— APPARTIENT —— CAT_DEPENSE -->
+<polygon points="892,720 920,700 948,720 920,740" class="assoc-diamond" stroke="#888"/>
+<text x="920" y="720" class="assoc-name" fill="#aaa">appartient</text>
+<line x1="892" y1="680" x2="892" y2="720" class="rel-line"/>
+<line x1="920" y1="740" x2="920" y2="760" class="rel-line"/>
+<text x="900" y="700" class="card-label">0,N</text>
+<text x="900" y="756" class="card-label">1,1</text>
+
+<!-- UTILISATEUR —— GERE —— PROJET -->
+<polygon points="960,290 990,270 1020,290 990,310" class="assoc-diamond" stroke="#888"/>
+<text x="990" y="290" class="assoc-name" fill="#aaa">gère</text>
+<line x1="1042" y1="220" x2="990" y2="270" class="rel-line"/>
+<line x1="960" y1="290" x2="540" y2="200" class="rel-line"/>
+<text x="1020" y="250" class="card-label">1,1</text>
+<text x="640" y="240" class="card-label">0,N</text>
+
+</svg>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <svg width="16" height="16"><polygon points="8,0 16,8 8,16 0,8" fill="#1a1a1a" stroke="#ff6b35" stroke-width="1.5"/></svg>
+    Entité
+  </div>
+  <div class="legend-item">
+    <svg width="16" height="16"><polygon points="8,0 16,8 8,16 0,8" fill="#222" stroke="#888" stroke-width="1.5"/></svg>
+    Association
+  </div>
+  <div class="legend-item">
+    <svg width="30" height="12"><text x="0" y="10" style="font-family:Space Mono,monospace;font-size:10px;fill:#ff6b35">#</text><text x="14" y="10" style="font-family:Space Mono,monospace;font-size:10px;fill:#ff6b35">id</text></svg>
+    Clé primaire
+  </div>
+  <div class="legend-item">
+    <svg width="30" height="12"><line x1="0" y1="6" x2="30" y2="6" stroke="#444" stroke-width="1.5"/></svg>
+    Lien entité–association
+  </div>
+  <div class="legend-item">
+    <svg width="30" height="12"><line x1="0" y1="6" x2="30" y2="6" stroke="#555" stroke-width="1" stroke-dasharray="4,2"/></svg>
+    Lien optionnel
+  </div>
+  <div class="legend-item" style="color:#888; margin-left:20px;">
+    Cardinalités : 1,1 · 0,N · 1,N
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Schéma Relationnel – Nextmux Mini ERP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0d0d;
+    color: #f0ede6;
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+
+  h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+  .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff6b35;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .table-card {
+    background: #141414;
+    border: 1.5px solid #2a2a2a;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .table-card:hover { border-color: #444; }
+
+  .table-header {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #222;
+  }
+  .table-icon {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .table-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead tr {
+    background: #1a1a1a;
+  }
+  thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    text-align: left;
+    font-weight: 400;
+  }
+  tbody tr {
+    border-top: 1px solid #1e1e1e;
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: #1a1a1a; }
+  tbody td {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 6px 14px;
+    color: #bbb;
+    vertical-align: middle;
+  }
+  .col-name { color: #ddd; }
+  .col-name.pk { color: #ff6b35; font-weight: 700; }
+  .col-name.fk { color: #7eb8f7; }
+  .col-type { color: #666; }
+  .col-constraint {
+    font-size: 9px;
+    color: #444;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .badge-pk { background: #2a1500; color: #ff6b35; border: 1px solid #ff6b3540; }
+  .badge-fk { background: #0a1525; color: #7eb8f7; border: 1px solid #7eb8f740; }
+  .badge-nn { background: #1a1a1a; color: #555; border: 1px solid #333; }
+  .badge-uq { background: #141e14; color: #a8e6cf; border: 1px solid #a8e6cf40; }
+
+  .relations-section {
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 30px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 24px;
+  }
+  .relations-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .relations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .rel-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    border: 1px solid #222;
+  }
+  .rel-from { color: #ff6b35; }
+  .rel-to { color: #7eb8f7; }
+  .rel-arrow { color: #444; }
+
+  .legend {
+    display: flex; gap: 20px; margin-top: 24px; flex-wrap: wrap; justify-content: center;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Space Mono', monospace; font-size: 10px; color: #555;
+  }
+</style>
+</head>
+<body>
+
+<h1>Schéma Relationnel Final</h1>
+<p class="subtitle">Nextmux · Mini ERP</p>
+
+<div class="grid">
+
+  <!-- ===== UTILISATEUR ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#aaa;"></div>
+      <span class="table-name" style="color:#aaa;">UTILISATEUR</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_utilisateur</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">nom</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">email</td><td class="col-type">VARCHAR(150)</td><td><span class="badge badge-nn">NOT NULL</span> <span class="badge badge-uq">UNIQUE</span></td></tr>
+        <tr><td class="col-name">mot_de_passe</td><td class="col-type">VARCHAR(255)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">role</td><td class="col-type">ENUM</td><td><span class="col-constraint">admin, manager, employé</span></td></tr>
+        <tr><td class="col-name">date_creation</td><td class="col-type">TIMESTAMP</td><td><span class="col-constraint">DEFAULT NOW()</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== CLIENT ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#ff6b35;"></div>
+      <span class="table-name" style="color:#ff6b35;">CLIENT</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_client</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">nom</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">prenom</td><td class="col-type">VARCHAR(100)</td><td></td></tr>
+        <tr><td class="col-name">email</td><td class="col-type">VARCHAR(150)</td><td><span class="badge badge-uq">UNIQUE</span></td></tr>
+        <tr><td class="col-name">telephone</td><td class="col-type">VARCHAR(20)</td><td></td></tr>
+        <tr><td class="col-name">adresse</td><td class="col-type">TEXT</td><td></td></tr>
+        <tr><td class="col-name">statut</td><td class="col-type">ENUM</td><td><span class="col-constraint">actif, inactif</span></td></tr>
+        <tr><td class="col-name">date_creation</td><td class="col-type">TIMESTAMP</td><td><span class="col-constraint">DEFAULT NOW()</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== PROJET ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#f7c873;"></div>
+      <span class="table-name" style="color:#f7c873;">PROJET</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_projet</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">nom_projet</td><td class="col-type">VARCHAR(150)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td></td></tr>
+        <tr><td class="col-name">date_debut</td><td class="col-type">DATE</td><td></td></tr>
+        <tr><td class="col-name">date_fin</td><td class="col-type">DATE</td><td></td></tr>
+        <tr><td class="col-name">budget</td><td class="col-type">DECIMAL(12,2)</td><td></td></tr>
+        <tr><td class="col-name">statut</td><td class="col-type">ENUM</td><td><span class="col-constraint">en_cours, terminé, annulé</span></td></tr>
+        <tr><td class="col-name fk">id_client</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → CLIENT</td></tr>
+        <tr><td class="col-name fk">id_utilisateur</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → UTILISATEUR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== TACHE ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#a8e6cf;"></div>
+      <span class="table-name" style="color:#a8e6cf;">TACHE</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_tache</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">titre</td><td class="col-type">VARCHAR(200)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td></td></tr>
+        <tr><td class="col-name">date_echeance</td><td class="col-type">DATE</td><td></td></tr>
+        <tr><td class="col-name">priorite</td><td class="col-type">ENUM</td><td><span class="col-constraint">basse, normale, haute, urgente</span></td></tr>
+        <tr><td class="col-name">statut</td><td class="col-type">ENUM</td><td><span class="col-constraint">à_faire, en_cours, terminée</span></td></tr>
+        <tr><td class="col-name fk">id_projet</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → PROJET</td></tr>
+        <tr><td class="col-name fk">id_utilisateur</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → UTILISATEUR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== FACTURE ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#c9a8f7;"></div>
+      <span class="table-name" style="color:#c9a8f7;">FACTURE</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_facture</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">numero</td><td class="col-type">VARCHAR(50)</td><td><span class="badge badge-uq">UNIQUE</span> <span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">date_emission</td><td class="col-type">DATE</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">date_echeance</td><td class="col-type">DATE</td><td></td></tr>
+        <tr><td class="col-name">montant_ht</td><td class="col-type">DECIMAL(12,2)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">tva</td><td class="col-type">DECIMAL(5,2)</td><td><span class="col-constraint">DEFAULT 0.00</span></td></tr>
+        <tr><td class="col-name">montant_ttc</td><td class="col-type">DECIMAL(12,2)</td><td><span class="col-constraint">GENERATED</span></td></tr>
+        <tr><td class="col-name">statut</td><td class="col-type">ENUM</td><td><span class="col-constraint">brouillon, envoyée, payée, annulée</span></td></tr>
+        <tr><td class="col-name fk">id_client</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → CLIENT</td></tr>
+        <tr><td class="col-name fk">id_projet</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → PROJET</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== LIGNE_FACTURE ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#c9a8f7; opacity:0.6;"></div>
+      <span class="table-name" style="color:#c9a8f7; opacity:0.8;">LIGNE_FACTURE</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_ligne</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">description</td><td class="col-type">VARCHAR(255)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">quantite</td><td class="col-type">INT</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">prix_unitaire</td><td class="col-type">DECIMAL(10,2)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">sous_total</td><td class="col-type">DECIMAL(12,2)</td><td><span class="col-constraint">GENERATED</span></td></tr>
+        <tr><td class="col-name fk">id_facture</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → FACTURE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== PAIEMENT ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#c9a8f7;"></div>
+      <span class="table-name" style="color:#c9a8f7;">PAIEMENT</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_paiement</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">montant</td><td class="col-type">DECIMAL(12,2)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">date_paiement</td><td class="col-type">DATE</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">mode_paiement</td><td class="col-type">ENUM</td><td><span class="col-constraint">virement, chèque, espèces, carte</span></td></tr>
+        <tr><td class="col-name">reference</td><td class="col-type">VARCHAR(100)</td><td></td></tr>
+        <tr><td class="col-name">statut</td><td class="col-type">ENUM</td><td><span class="col-constraint">en_attente, validé, rejeté</span></td></tr>
+        <tr><td class="col-name fk">id_facture</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → FACTURE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== CAT_DEPENSE ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#888;"></div>
+      <span class="table-name" style="color:#aaa;">CAT_DEPENSE</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_categorie</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">libelle</td><td class="col-type">VARCHAR(100)</td><td><span class="badge badge-nn">NOT NULL</span> <span class="badge badge-uq">UNIQUE</span></td></tr>
+        <tr><td class="col-name">couleur</td><td class="col-type">VARCHAR(7)</td><td><span class="col-constraint">hex code</span></td></tr>
+        <tr><td class="col-name">description</td><td class="col-type">TEXT</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== DEPENSE ===== -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-icon" style="background:#c9a8f7;"></div>
+      <span class="table-name" style="color:#c9a8f7;">DEPENSE</span>
+    </div>
+    <table>
+      <thead><tr><th>Colonne</th><th>Type</th><th>Contraintes</th></tr></thead>
+      <tbody>
+        <tr><td class="col-name pk">id_depense</td><td class="col-type">INT</td><td><span class="badge badge-pk">PK</span> <span class="badge badge-nn">AI</span></td></tr>
+        <tr><td class="col-name">libelle</td><td class="col-type">VARCHAR(200)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">montant</td><td class="col-type">DECIMAL(12,2)</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">date_depense</td><td class="col-type">DATE</td><td><span class="badge badge-nn">NOT NULL</span></td></tr>
+        <tr><td class="col-name">justificatif</td><td class="col-type">VARCHAR(255)</td><td><span class="col-constraint">chemin fichier</span></td></tr>
+        <tr><td class="col-name fk">id_projet</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → PROJET</td></tr>
+        <tr><td class="col-name fk">id_categorie</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → CAT_DEPENSE</td></tr>
+        <tr><td class="col-name fk">id_utilisateur</td><td class="col-type">INT</td><td><span class="badge badge-fk">FK</span> → UTILISATEUR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Relations summary -->
+<div class="relations-section">
+  <p class="relations-title">Contraintes de clés étrangères (Foreign Keys)</p>
+  <div class="relations-grid">
+    <div class="rel-item"><span class="rel-from">PROJET.id_client</span> <span class="rel-arrow">──▶</span> <span class="rel-to">CLIENT.id_client</span></div>
+    <div class="rel-item"><span class="rel-from">PROJET.id_utilisateur</span> <span class="rel-arrow">──▶</span> <span class="rel-to">UTILISATEUR.id_utilisateur</span></div>
+    <div class="rel-item"><span class="rel-from">TACHE.id_projet</span> <span class="rel-arrow">──▶</span> <span class="rel-to">PROJET.id_projet</span></div>
+    <div class="rel-item"><span class="rel-from">TACHE.id_utilisateur</span> <span class="rel-arrow">──▶</span> <span class="rel-to">UTILISATEUR.id_utilisateur</span></div>
+    <div class="rel-item"><span class="rel-from">FACTURE.id_client</span> <span class="rel-arrow">──▶</span> <span class="rel-to">CLIENT.id_client</span></div>
+    <div class="rel-item"><span class="rel-from">FACTURE.id_projet</span> <span class="rel-arrow">──▶</span> <span class="rel-to">PROJET.id_projet</span></div>
+    <div class="rel-item"><span class="rel-from">LIGNE_FACTURE.id_facture</span> <span class="rel-arrow">──▶</span> <span class="rel-to">FACTURE.id_facture</span></div>
+    <div class="rel-item"><span class="rel-from">PAIEMENT.id_facture</span> <span class="rel-arrow">──▶</span> <span class="rel-to">FACTURE.id_facture</span></div>
+    <div class="rel-item"><span class="rel-from">DEPENSE.id_projet</span> <span class="rel-arrow">──▶</span> <span class="rel-to">PROJET.id_projet</span></div>
+    <div class="rel-item"><span class="rel-from">DEPENSE.id_categorie</span> <span class="rel-arrow">──▶</span> <span class="rel-to">CAT_DEPENSE.id_categorie</span></div>
+    <div class="rel-item"><span class="rel-from">DEPENSE.id_utilisateur</span> <span class="rel-arrow">──▶</span> <span class="rel-to">UTILISATEUR.id_utilisateur</span></div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="badge badge-pk" style="font-size:10px;">PK</span> Clé primaire</div>
+  <div class="legend-item"><span class="badge badge-fk" style="font-size:10px;">FK</span> Clé étrangère</div>
+  <div class="legend-item"><span class="badge badge-uq" style="font-size:10px;">UNIQUE</span> Valeur unique</div>
+  <div class="legend-item"><span class="badge badge-nn" style="font-size:10px;">NOT NULL</span> Obligatoire</div>
+  <div class="legend-item"><span class="badge badge-nn" style="font-size:10px;">AI</span> Auto-incrément</div>
+</div>
+
+</body>
+</html>

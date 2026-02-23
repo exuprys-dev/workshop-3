@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Diagramme de Cas d'Utilisation – Nextmux Mini ERP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0d0d;
+    color: #f0ede6;
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+    color: #f0ede6;
+  }
+
+  .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff6b35;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .diagram-container {
+    width: 100%;
+    max-width: 1100px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 40px;
+    position: relative;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Actor */
+  .actor-figure { stroke: #ff6b35; stroke-width: 2; fill: none; }
+  .actor-head { stroke: #ff6b35; stroke-width: 2; fill: #1a1a1a; }
+  .actor-label { fill: #f0ede6; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; text-anchor: middle; }
+
+  /* System boundary */
+  .system-rect { fill: #181818; stroke: #2a2a2a; stroke-width: 2; rx: 6; }
+  .system-label { fill: #555; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; text-anchor: middle; text-transform: uppercase; }
+
+  /* Use cases */
+  .uc-ellipse { stroke-width: 1.5; fill: #1e1e1e; }
+  .uc-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+
+  /* Lines */
+  .assoc-line { stroke: #ff6b35; stroke-width: 1.5; fill: none; opacity: 0.7; }
+  .include-line { stroke: #7eb8f7; stroke-width: 1; fill: none; stroke-dasharray: 5,3; opacity: 0.6; }
+  .include-label { fill: #7eb8f7; font-family: 'Space Mono', monospace; font-size: 9px; text-anchor: middle; }
+
+  /* Category groups */
+  .cat-clients { stroke: #ff6b35; }
+  .cat-projets { stroke: #f7c873; }
+  .cat-taches  { stroke: #a8e6cf; }
+  .cat-finance { stroke: #c9a8f7; }
+
+  .label-clients { fill: #ff6b35; }
+  .label-projets { fill: #f7c873; }
+  .label-taches  { fill: #a8e6cf; }
+  .label-finance { fill: #c9a8f7; }
+
+  .legend {
+    display: flex;
+    gap: 30px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #888;
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid;
+  }
+</style>
+</head>
+<body>
+
+<h1>Diagramme de Cas d'Utilisation</h1>
+<p class="subtitle">Nextmux · Mini ERP · Acteur : Administrateur</p>
+
+<div class="diagram-container">
+<svg viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- System boundary -->
+  <rect x="160" y="30" width="800" height="720" rx="8" class="system-rect"/>
+  <text x="560" y="22" class="system-label">Système Mini ERP — Nextmux</text>
+
+  <!-- ===== ACTOR : Administrateur ===== -->
+  <!-- Head -->
+  <circle cx="75" cy="390" r="20" class="actor-head"/>
+  <!-- Body -->
+  <line x1="75" y1="410" x2="75" y2="460" class="actor-figure"/>
+  <!-- Arms -->
+  <line x1="45" y1="430" x2="105" y2="430" class="actor-figure"/>
+  <!-- Legs -->
+  <line x1="75" y1="460" x2="50" y2="500" class="actor-figure"/>
+  <line x1="75" y1="460" x2="100" y2="500" class="actor-figure"/>
+  <text x="75" y="520" class="actor-label">Administrateur</text>
+
+  <!-- ============================== -->
+  <!-- MODULE : CLIENTS (orange)      -->
+  <!-- ============================== -->
+  <!-- Group label -->
+  <text x="285" y="65" class="uc-label label-clients" style="font-size:10px;letter-spacing:2px;">CLIENTS</text>
+
+  <!-- UC1: Gérer les clients -->
+  <ellipse cx="320" cy="100" rx="110" ry="28" class="uc-ellipse cat-clients"/>
+  <text x="320" y="100" class="uc-label" fill="#ff6b35">Gérer les clients</text>
+
+  <!-- UC1a: Ajouter un client -->
+  <ellipse cx="220" cy="170" rx="85" ry="24" class="uc-ellipse cat-clients" style="stroke-width:1;opacity:0.5;"/>
+  <text x="220" y="170" class="uc-label" fill="#ff6b35" style="font-size:10px;">Ajouter un client</text>
+
+  <!-- UC1b: Modifier/Supprimer client -->
+  <ellipse cx="420" cy="170" rx="95" ry="24" class="uc-ellipse cat-clients" style="stroke-width:1;opacity:0.5;"/>
+  <text x="420" y="170" class="uc-label" fill="#ff6b35" style="font-size:10px;">Modifier / Supprimer</text>
+
+  <!-- include arrows -->
+  <line x1="320" y1="128" x2="230" y2="146" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="320" y1="128" x2="410" y2="146" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="268" y="140" class="include-label">«include»</text>
+  <text x="378" y="140" class="include-label">«include»</text>
+
+  <!-- Assoc actor -> UC1 -->
+  <line x1="130" y1="390" x2="308" y2="115" class="assoc-line"/>
+
+  <!-- ============================== -->
+  <!-- MODULE : PROJETS (yellow)      -->
+  <!-- ============================== -->
+  <text x="620" y="65" class="uc-label label-projets" style="font-size:10px;letter-spacing:2px;">PROJETS</text>
+
+  <ellipse cx="660" cy="100" rx="110" ry="28" class="uc-ellipse cat-projets"/>
+  <text x="660" y="100" class="uc-label" fill="#f7c873">Gérer les projets</text>
+
+  <ellipse cx="570" cy="170" rx="85" ry="24" class="uc-ellipse cat-projets" style="stroke-width:1;opacity:0.5;"/>
+  <text x="570" y="170" class="uc-label" fill="#f7c873" style="font-size:10px;">Créer un projet</text>
+
+  <ellipse cx="760" cy="170" rx="95" ry="24" class="uc-ellipse cat-projets" style="stroke-width:1;opacity:0.5;"/>
+  <text x="760" y="170" class="uc-label" fill="#f7c873" style="font-size:10px;">Clôturer un projet</text>
+
+  <line x1="660" y1="128" x2="580" y2="146" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="660" y1="128" x2="750" y2="146" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="608" y="140" class="include-label">«include»</text>
+  <text x="712" y="140" class="include-label">«include»</text>
+
+  <line x1="130" y1="385" x2="547" y2="115" class="assoc-line"/>
+
+  <!-- ============================== -->
+  <!-- MODULE : TÂCHES (green)        -->
+  <!-- ============================== -->
+  <text x="260" y="265" class="uc-label label-taches" style="font-size:10px;letter-spacing:2px;">TÂCHES</text>
+
+  <ellipse cx="320" cy="310" rx="120" ry="28" class="uc-ellipse cat-taches"/>
+  <text x="320" y="310" class="uc-label" fill="#a8e6cf">Gérer les tâches</text>
+
+  <ellipse cx="210" cy="385" rx="85" ry="24" class="uc-ellipse cat-taches" style="stroke-width:1;opacity:0.5;"/>
+  <text x="210" y="385" class="uc-label" fill="#a8e6cf" style="font-size:10px;">Créer une tâche</text>
+
+  <ellipse cx="420" cy="385" rx="95" ry="24" class="uc-ellipse cat-taches" style="stroke-width:1;opacity:0.5;"/>
+  <text x="420" y="385" class="uc-label" fill="#a8e6cf" style="font-size:10px;">Suivre l'avancement</text>
+
+  <line x1="320" y1="338" x2="225" y2="361" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="320" y1="338" x2="408" y2="361" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="265" y="352" class="include-label">«include»</text>
+  <text x="370" y="352" class="include-label">«include»</text>
+
+  <line x1="130" y1="390" x2="200" y2="315" class="assoc-line"/>
+
+  <!-- ============================== -->
+  <!-- MODULE : FINANCE (purple)      -->
+  <!-- ============================== -->
+  <text x="575" y="265" class="uc-label label-finance" style="font-size:10px;letter-spacing:2px;">FINANCE</text>
+
+  <!-- Facturation -->
+  <ellipse cx="640" cy="310" rx="110" ry="28" class="uc-ellipse cat-finance"/>
+  <text x="640" y="310" class="uc-label" fill="#c9a8f7">Gérer la facturation</text>
+
+  <ellipse cx="570" cy="385" rx="85" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="570" y="385" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Créer une facture</text>
+
+  <ellipse cx="760" cy="385" rx="95" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="760" y="385" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Envoyer une facture</text>
+
+  <line x1="640" y1="338" x2="582" y2="361" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="640" y1="338" x2="748" y2="361" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="599" y="352" class="include-label">«include»</text>
+  <text x="700" y="352" class="include-label">«include»</text>
+
+  <line x1="130" y1="390" x2="527" y2="322" class="assoc-line"/>
+
+  <!-- Paiements -->
+  <ellipse cx="640" cy="490" rx="110" ry="28" class="uc-ellipse cat-finance"/>
+  <text x="640" y="490" class="uc-label" fill="#c9a8f7">Suivre les paiements</text>
+
+  <ellipse cx="560" cy="570" rx="90" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="560" y="570" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Enregistrer paiement</text>
+
+  <ellipse cx="760" cy="570" rx="90" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="760" y="570" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Relancer client</text>
+
+  <line x1="640" y1="518" x2="572" y2="546" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="640" y1="518" x2="748" y2="546" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="594" y="535" class="include-label">«include»</text>
+  <text x="700" y="535" class="include-label">«include»</text>
+
+  <line x1="130" y1="395" x2="527" y2="490" class="assoc-line"/>
+
+  <!-- Dépenses -->
+  <ellipse cx="320" cy="490" rx="110" ry="28" class="uc-ellipse cat-finance"/>
+  <text x="320" y="490" class="uc-label" fill="#c9a8f7">Gérer les dépenses</text>
+
+  <ellipse cx="230" cy="575" rx="90" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="230" y="575" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Ajouter dépense</text>
+
+  <ellipse cx="420" cy="575" rx="90" ry="24" class="uc-ellipse cat-finance" style="stroke-width:1;opacity:0.5;"/>
+  <text x="420" y="575" class="uc-label" fill="#c9a8f7" style="font-size:10px;">Catégoriser dépense</text>
+
+  <line x1="320" y1="518" x2="242" y2="551" class="include-line" marker-end="url(#arrow-blue)"/>
+  <line x1="320" y1="518" x2="408" y2="551" class="include-line" marker-end="url(#arrow-blue)"/>
+  <text x="270" y="537" class="include-label">«include»</text>
+  <text x="370" y="537" class="include-label">«include»</text>
+
+  <line x1="130" y1="400" x2="207" y2="490" class="assoc-line"/>
+
+  <!-- Tableau de bord -->
+  <ellipse cx="480" cy="700" rx="130" ry="30" class="uc-ellipse" style="stroke:#888;stroke-width:1.5;fill:#181818;"/>
+  <text x="480" y="700" class="uc-label" fill="#aaa">Consulter tableau de bord</text>
+  <line x1="130" y1="400" x2="347" y2="700" class="assoc-line" stroke-dasharray="4,2"/>
+
+  <!-- ============================== -->
+  <!-- ARROW MARKERS                  -->
+  <!-- ============================== -->
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#7eb8f7" opacity="0.7"/>
+    </marker>
+  </defs>
+
+</svg>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="border-color:#ff6b35;"></div> Clients</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#f7c873;"></div> Projets</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#a8e6cf;"></div> Tâches</div>
+  <div class="legend-item"><div class="legend-dot" style="border-color:#c9a8f7;"></div> Finance (Facturation, Paiements, Dépenses)</div>
+  <div class="legend-item" style="gap:10px;">
+    <svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="#7eb8f7" stroke-dasharray="4,2" stroke-width="1.5"/></svg>
+    «include»
+  </div>
+  <div class="legend-item" style="gap:10px;">
+    <svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="#ff6b35" stroke-width="1.5"/></svg>
+    Association acteur
+  </div>
+</div>
+
+</body>
+</html>
