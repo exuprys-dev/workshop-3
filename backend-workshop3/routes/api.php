@@ -23,6 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('projects', ProjectController::class)->only(['index', 'show']);
     Route::apiResource('tasks', TaskController::class);
 
+    // Finance aliases
+    
+
     // Admin only routes
     Route::middleware('can:admin-only')->group(function () {
         Route::apiResource('clients', ClientController::class);
